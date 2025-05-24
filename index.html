@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GADHA QUEST</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800&family=DotGothic16&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --main-bg-color: #EFFBFA; 
+            --container-border-color: #4FD1C5; 
+            --container-shadow-color: #38B2AC; 
+            --header-text-color: #2C7A7B; 
+            --header-shadow-color: #A7F3E8; 
+            --header-dot-shadow1: #286869; 
+            --header-dot-shadow2: #66C5BC; 
+            --nav-active-bg: #319795;
+            --nav-active-border: #2C7A7B;
+            --nav-inactive-bg: #718096; 
+            --nav-inactive-border: #4A5568;
+            --card-border-color: #63B3ED; 
+            --card-shadow-color: #4299E1;
+            --card-title-color: #2B6CB0;
+            --status-bar-bg: #D6F5FE; 
+            --status-bar-border: #63B3ED;
+            --accent-warm-color: #F6AD55; 
+            --accent-warm-dark-color: #DD6B20;
+            --accent-green-color: #48BB78;
+            --accent-green-dark-color: #38A169;
+            --text-dark-blue: #1A202C; 
+            --highlight-bg: #FEEBC8;
+            --highlight-text: #9C4221;
+            --font-main: 'M PLUS Rounded 1c', sans-serif;
+            --font-pixel: 'DotGothic16', sans-serif;
+            --diary-evaluation-bg: #FFFACD; 
+            --diary-evaluation-border: #FADFAD; 
+            --caretchi-hint-bg: #FFF9EB; 
+            --caretchi-hint-border: #FBD38D;
+        }
+        body {
+            font-family: var(--font-main);
+            font-weight: 700;
+            background-color: var(--main-bg-color);
+            color: var(--text-dark-blue);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 1rem;
+            overflow-x: hidden;
+        }
+        .container {
+            background-color: #FFFFFF;
+            border-radius: 24px;
+            border: 4px solid var(--container-border-color);
+            box-shadow: 0 12px 28px rgba(79, 209, 197, 0.25), 8px 8px 0px var(--container-shadow-color);
+            padding:clamp(1.2rem, 4vw, 1.8rem);
+            width: 100%;
+            max-width: 800px;
+            margin-top: 0;
+        }
+        .pixel-font { font-family: var(--font-pixel); }
+        .header-title {
+            font-family: var(--font-main); 
+            font-weight: 800; 
+            color: var(--header-text-color);
+            text-shadow: 
+                3px 3px 0px var(--header-dot-shadow1), 
+                1px 1px 0px var(--header-dot-shadow2),
+                -1px -1px 0px var(--header-dot-shadow2),
+                1px -1px 0px var(--header-dot-shadow2),
+                -1px 1px 0px var(--header-dot-shadow2),
+                0 0 12px rgba(118, 210, 201, 0.6);
+            font-size: clamp(2.4rem, 9vw, 3.5rem); 
+            margin-bottom: 1.5rem; 
+            text-align: center;
+            letter-spacing: -1.5px; 
+            line-height: 1.1;
+        }
+        .navigation-header {
+            width: 100%;
+            max-width: 800px;
+            background-color: var(--status-bar-bg);
+            border-bottom: 3px solid var(--status-bar-border);
+            padding: 0.6rem 0.2rem;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            z-index: 100;
+            border-radius: 12px 12px 0 0;
+            margin-bottom: 1.2rem;
+        }
+        .nav-button {
+            font-family: var(--font-pixel);
+            background-color: var(--nav-inactive-bg); color: white;
+            border: 2px solid var(--nav-inactive-border);
+            box-shadow: 3px 3px 0px var(--nav-inactive-border);
+            padding: 0.6rem 0.4rem;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 0.75rem;
+            flex-grow: 1; margin: 0 3px;
+            max-width: 19%;
+            white-space: nowrap;
+            overflow: hidden; text-overflow: ellipsis;
+            font-weight: 700;
+            transition: all 0.15s ease-in-out;
+        }
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 4px 5px 0px var(--nav-inactive-border);
+        }
+        .nav-button.active {
+            background-color: var(--nav-active-bg);
+            border-color: var(--nav-active-border);
+            box-shadow: 2px 2px 0px var(--nav-active-border);
+            transform: translateY(1px);
+        }
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        .pq-card {
+            background-color: #FFF;
+            border: 3px solid var(--card-border-color);
+            border-radius: 16px; 
+            padding: 1.3rem; 
+            margin-bottom: 1.3rem;
+            box-shadow: 7px 7px 0px var(--card-shadow-color); 
+        }
+        .pq-card-title {
+            font-family: var(--font-pixel);
+            font-size: 1.4rem; 
+            color: var(--card-title-color);
+            margin-bottom: 0.7rem;
+            border-bottom: 3px dashed var(--card-border-color); 
+            padding-bottom: 0.5rem;
+            font-weight: 700;
+        }
+        .status-bar {
+            display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap;
+            background-color: var(--status-bar-bg); padding: 0.7rem; border-radius: 16px; 
+            margin-bottom: 1.3rem; border: 3px solid var(--status-bar-border);
+            box-shadow: inset 0 3px 6px rgba(0,0,0,0.1), 5px 5px 0 var(--status-bar-border); 
+        }
+        .status-item { text-align: center; margin: 0.3rem 0.6rem; }
+        .status-item .label { font-family: var(--font-pixel); font-size: 0.9rem; color: var(--card-title-color); font-weight: 700;}
+        .status-item .value { font-size: 1.3rem; font-weight: 700; color: var(--header-text-color); }
+        .avatar-container {
+            width: 70px; height: 70px; background-color: var(--accent-warm-color); 
+            border-radius: 20px; display: flex; justify-content: center; align-items: center;
+            box-shadow: 5px 5px 0px var(--accent-warm-dark-color);
+            border: 3px solid var(--accent-warm-dark-color);
+        }
+        .avatar { font-size: 2.5rem; }
+
+        textarea, input[type="text"], select {
+            width: 100%; padding: 0.8rem; border: 3px solid var(--card-border-color);
+            border-radius: 12px; margin-bottom: 0.9rem; box-sizing: border-box;
+            background-color: #F8FAFC;
+            font-size: 1rem; font-weight: 700;
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.06);
+        }
+        textarea:focus, input[type="text"]:focus, select:focus {
+            border-color: var(--accent-warm-color);
+            outline: none;
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.06), 0 0 0 3px var(--accent-warm-color); 
+        }
+
+        .pq-button {
+            font-family: var(--font-pixel); color: #FFF; padding: 14px 20px;
+            border-radius: 12px; text-transform: uppercase; font-weight: 700;
+            cursor: pointer; transition: all 0.15s ease-in-out; margin: 7px;
+            font-size: 0.95rem;
+            letter-spacing: 0.8px; 
+            text-shadow: 1px 1px 0px rgba(0,0,0,0.2); 
+        }
+        .pq-button:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: var(--accent-warm-dark-color) 0px 8px 0px 0px; 
+        }
+        .pq-button:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0px var(--nav-inactive-border) !important; } 
+
+        .pq-button.primary {
+            background-color: var(--nav-active-bg); border: 3px solid var(--nav-active-border);
+            box-shadow: 5px 5px 0px var(--nav-active-border);
+        }
+         .pq-button.primary:hover { box-shadow: var(--nav-active-border) 0px 8px 0px 0px; }
+
+
+        .pq-button.accent {
+            background-color: var(--accent-warm-color); border: 3px solid var(--accent-warm-dark-color);
+            box-shadow: 5px 5px 0px var(--accent-warm-dark-color);
+        }
+        .pq-button.accent:hover { box-shadow: var(--accent-warm-dark-color) 0px 8px 0px 0px; }
+
+        .pq-button.green {
+            background-color: var(--accent-green-color); border: 3px solid var(--accent-green-dark-color);
+            box-shadow: 5px 5px 0px var(--accent-green-dark-color);
+        }
+        .pq-button.green:hover { box-shadow: var(--accent-green-dark-color) 0px 8px 0px 0px; }
+
+
+        .ai-feedback, .diary-evaluation, .caretchi-advice, .action-goal-hint { 
+            background-color: var(--diary-evaluation-bg); 
+            border: 3px dashed var(--diary-evaluation-border); 
+            border-radius: 16px; padding: 1.3rem; margin-top: 1.3rem;
+            box-shadow: 0 4px 6px rgba(250, 223, 173, 0.3); 
+        }
+        .ai-feedback h3, .diary-evaluation h3, .caretchi-advice h3, .action-goal-hint h3 { 
+            font-family: var(--font-pixel); 
+            color: var(--accent-warm-dark-color); 
+            margin-top: 0; font-size: 1.3rem; font-weight: 700;
+        }
+        .ai-feedback p, .diary-evaluation p, .caretchi-advice p, .action-goal-hint p, .diary-evaluation ul li { 
+            color: #B7791F; line-height: 1.7; font-size: 1rem; font-weight: 700;
+        }
+        .caretchi-advice { 
+            padding: 0.8rem; margin-top: 0.5rem; margin-bottom: 1rem;
+            text-align: center; font-size: 0.95rem;
+        }
+        .action-goal-hint { 
+            padding: 1rem; margin-top: 0.8rem;
+            font-size: 0.9rem;
+            background-color: var(--caretchi-hint-bg);
+            border-color: var(--caretchi-hint-border);
+        }
+        .action-goal-hint h3 { font-size: 1.1rem; margin-bottom: 0.5rem;}
+        .action-goal-hint ul { list-style-type: '👉'; padding-left: 1.5rem; } 
+        .action-goal-hint li { margin-bottom: 0.3rem; }
+
+        .highlight {
+            background-color: var(--highlight-bg); padding: 0.2em 0.5em;
+            border-radius: 6px; font-weight: 700; color: var(--highlight-text);
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+        }
+        .small-text { font-size: 0.95rem; font-weight: 700;}
+        .modal {
+            display: none; position: fixed; z-index: 1000; left: 0; top: 0;
+            width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.8);
+        }
+        .modal-content {
+            background-color: var(--main-bg-color); margin: 7% auto; padding: 30px;
+            border: 6px solid var(--container-shadow-color); border-radius: 20px;
+            width: 90%; max-width: 750px; box-shadow: 12px 12px 0px var(--header-text-color);
+            position: relative; max-height: 85vh; overflow-y: auto;
+        }
+        .modal-title { font-family: var(--font-pixel); font-size: 1.6rem; color: var(--header-text-color); margin-bottom: 15px; font-weight: 700;}
+        .modal-body p { margin-bottom: 1rem !important; line-height: 1.75; font-size: 1.05rem; } 
+        .close-button {
+            color: var(--accent-warm-dark-color); position: absolute; top: 10px; right: 20px;
+            font-size: 32px; font-weight: bold; cursor: pointer; text-shadow: 1px 1px #FFF5EB;
+        }
+        .chat-bubble {
+            padding: 0.7rem 1rem; border-radius: 14px;
+            margin-bottom: 0.7rem; max-width: 85%; font-size: 1rem; font-weight: 700;
+            box-shadow: 3px 3px 5px rgba(0,0,0,0.12);
+        }
+        .chat-bubble.user {
+            background-color: var(--accent-warm-color); color: white;
+            margin-left: auto; border-bottom-right-radius: 0;
+        }
+        .chat-bubble.ai {
+            background-color: var(--status-bar-bg); color: var(--text-dark-blue);
+            margin-right: auto; border-bottom-left-radius: 0;
+        }
+        #diaryLogListContainer { max-height: 350px; overflow-y: auto; padding-right: 10px;}
+        .theory-section-summary { font-size: 0.95rem; color: #4A5568; margin-bottom: 0.7rem; font-weight: 500;}
+        .theory-section {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            background-color: #F0FFFFA0; 
+        }
+        .theory-section:hover {
+            transform: translateY(-4px) scale(1.01); 
+            box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+        }
+
+        @media (max-width: 480px) { 
+            .nav-button { font-size: 0.7rem; padding: 0.5rem 0.2rem; max-width: 18%;}
+            .header-title {font-size: 2rem; letter-spacing: -1px;}
+            .pq-button { padding: 10px 12px; font-size: 0.85rem;}
+            .modal-content {width: 95%; padding: 20px;}
+            .pq-card { padding: 1rem; }
+            .status-item .label { font-size: 0.75rem;}
+            .status-item .value { font-size: 1.1rem;}
+        }
+    </style>
+</head>
+<body>
+    <h1 class="header-title">GADHA QUEST</h1>
+    <div class="navigation-header">
+        <button class="nav-button active" onclick="navigateTo('homeScreen')">ホーム</button>
+        <button class="nav-button" onclick="navigateTo('libraryScreen')">図書館</button>
+        <button class="nav-button" onclick="navigateTo('diaryScreen')">実践日記</button>
+        <button class="nav-button" onclick="navigateTo('customInfoScreen')">専用情報</button>
+        <button class="nav-button" onclick="navigateTo('aiSupportScreen')">AIサポート</button>
+    </div>
+
+    <div class="container">
+        <div id="loadingIndicator" class="fixed inset-0 bg-gray-700 bg-opacity-80 flex items-center justify-center z-50" style="display: none;">
+            <div class="pixel-font text-white text-2xl p-6 bg-teal-600 rounded-xl shadow-2xl">ケアっちが準備中...</div>
+        </div>
+
+        <div id="homeScreen" class="screen active">
+            <h2 class="pixel-font text-2xl text-center mb-2 text-green-600 font-bold">今日の冒険ステップ</h2>
+            <div id="caretchiHomeAdvice" class="caretchi-advice mb-4">ケアっち「今日の目標、一緒に頑張ろうね！」</div>
+            <div class="pq-card">
+                <h3 class="pq-card-title">今日の目標アクション</h3>
+                <p id="todayActionGoal" class="text-gray-800 text-base font-bold">ケアっちがあなたの日記から目標を設定します...</p>
+                <div id="todayActionGoalHint" class="action-goal-hint" style="display: none;">
+                    <h3 class="pixel-font">ケアっちのヒント</h3>
+                    <ul id="actionGoalHintList" class="text-sm"></ul>
+                </div>
+                <button class="pq-button primary text-xs mt-2" onclick="toggleActionGoalHint()">ヒントを見る/隠す</button>
+            </div>
+            <div class="status-bar">
+                <div class="avatar-container"><span class="avatar">💎</span></div>
+                <div class="status-item">
+                    <div class="label pixel-font">レベル</div>
+                    <div class="value" id="playerLevel">1</div>
+                </div>
+                <div class="status-item">
+                    <div class="label pixel-font">経験値</div>
+                    <div class="value" id="playerExp">0</div>
+                </div>
+                <div class="status-item">
+                    <div class="label pixel-font">ケアクリスタル</div>
+                    <div class="value" id="playerCareCrystals">0</div>
+                </div>
+            </div>
+            <div class="pq-card">
+                <h3 class="pq-card-title">体得進捗</h3>
+                <p class="text-base text-gray-700">理論の理解度: <span id="theoryProgress" class="font-bold">0</span>%</p>
+                <p class="text-base text-gray-700">実践回数: <span id="practiceCount" class="font-bold">0</span>回</p>
+                <div class="w-full bg-gray-300 rounded-full h-4 mt-2 shadow-inner">
+                    <div id="overallProgress" class="bg-green-500 h-4 rounded-full flex items-center justify-center text-sm text-white pixel-font transition-all duration-500 ease-out" style="width: 0%">0%</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="libraryScreen" class="screen">
+            <h2 class="pixel-font text-2xl text-center mb-2 text-blue-600 font-bold">GADHA理論図書館</h2>
+            <div id="caretchiLibraryAdvice" class="caretchi-advice mb-4">ケアっち「知りたいこと、何でも聞いてね！<span class="highlight">一つずつ</span>確認しよう。」</div>
+            <div id="theoryContent" class="space-y-4"></div>
+            <div class="pq-card mt-5">
+                <h3 class="pq-card-title">ケアっちに質問する</h3>
+                <input type="text" id="libraryQuery" placeholder="理論について質問を入力..." class="mb-2">
+                <button class="pq-button accent w-full" onclick="askCaretchiFromLibrary()">質問する</button>
+                <div id="libraryAiResponse" class="ai-feedback mt-3" style="display:none;"></div>
+            </div>
+        </div>
+
+        <div id="diaryScreen" class="screen">
+            <h2 class="pixel-font text-2xl text-center mb-2 text-green-700 font-bold">実践日記</h2>
+            <div id="caretchiDiaryAdvice" class="caretchi-advice mb-4">ケアっち「今日の出来事、<span class="highlight">どんな小さなことでも</span>記録してね！」</div>
+            <div class="flex gap-2 mb-4">
+                <input type="text" id="diarySearchKeyword" placeholder="日記をキーワード検索..." class="text-sm flex-grow">
+                <button class="pq-button primary text-xs" onclick="searchDiary()">検索</button>
+            </div>
+            <form id="practiceLogForm">
+                <div class="mb-4">
+                    <label for="diaryDate" class="block text-sm font-bold mb-1 pixel-font">日付：</label>
+                    <input type="date" id="diaryDate" name="diaryDate" required class="text-sm">
+                </div>
+                <div class="mb-4">
+                    <label for="diaryEntry" class="block text-sm font-bold mb-1 pixel-font">今日の振り返り：<span class="small-text text-gray-600">(自由に記述してね)</span></label>
+                    <textarea id="diaryEntry" name="diaryEntry" rows="7" required placeholder="今日あったこと、感じたこと、GADHA理論をどう意識したかなど..."></textarea>
+                </div>
+                <button type="submit" class="pq-button green w-full">日記を記録＆ケアっち評価</button>
+            </form>
+            <div id="lastDiaryEvaluation" class="diary-evaluation mt-4" style="display:none;">
+                <h3 class="pixel-font">ケアっちの評価</h3>
+                <p id="evaluationText"></p>
+                <div class="mt-2">
+                    <strong class="pixel-font text-sm text-amber-700">今日活かせた力：</strong>
+                    <span id="evaluatedStrengthText" class="text-amber-700 font-bold"></span>
+                </div>
+            </div>
+            <div id="diaryLogListContainer" class="mt-5">
+                 <h3 class="text-xl font-bold mb-3 pixel-font text-center">過去の日記</h3>
+                <div id="diaryLogList"></div>
+            </div>
+        </div>
+
+        <div id="customInfoScreen" class="screen">
+            <h2 class="pixel-font text-2xl text-center mb-2 text-purple-600 font-bold">あなた専用情報</h2>
+            <div id="caretchiCustomInfoAdvice" class="caretchi-advice mb-4">ケアっち「これは<span class="highlight">あなただけ</span>の特別な情報だよ！」</div>
+            <div id="customInfoContent">
+                </div>
+            <button class="pq-button accent w-full mt-3" onclick="updateCustomInfoWithAI()">AIで専用情報を更新</button>
+            <button class="pq-button primary w-full mt-1 text-sm" onclick="navigateToCaretchiWithCustomInfo()">この情報についてケアっちと話す</button>
+        </div>
+
+        <div id="aiSupportScreen" class="screen">
+            <h2 class="pixel-font text-2xl text-center mb-2 text-orange-500 font-bold">AIサポーター「ケアっち」</h2>
+            <div id="caretchiSupportAdvice" class="caretchi-advice mb-4">ケアっち「どんなことでも<span class="highlight">気軽に話しかけて</span>ね！」</div>
+            <div id="chatArea" class="h-72 overflow-y-auto border-2 border-gray-300 p-3 rounded-xl mb-3 bg-white shadow-inner">
+                <div class="chat-bubble ai">こんにちは！ケアっちだよ。なんでも話してね。</div>
+            </div>
+            <div class="flex gap-2">
+                <input type="text" id="chatInput" placeholder="メッセージを入力..." class="flex-grow">
+                <button class="pq-button accent" onclick="sendChatMessage()">送信</button>
+            </div>
+            <div id="actionableResponseArea" class="mt-4" style="display:none;">
+                <p class="text-base text-gray-700">ケアっちの提案：<span id="suggestedActionText" class="font-bold"></span></p>
+                <button class="pq-button primary text-sm mt-1" onclick="adoptAsActionGoal()">これを目標にする！</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="theoryModal" class="modal"><div class="modal-content"><span class="close-button" onclick="closeModal('theoryModal')">&times;</span><h3 id="modalTitle" class="modal-title"></h3><div id="modalBody" class="text-gray-800 leading-relaxed text-base"></div><div class="text-center mt-5"><button class="pq-button primary mr-2" onclick="markAsRead()">読んだ！</button><button class="pq-button accent" onclick="discussTheoryWithCaretchi()">この内容をケアっちと深める</button></div></div></div>
+    <div id="logModal" class="modal"><div class="modal-content"><span class="close-button" onclick="closeModal('logModal')">&times;</span><h3 id="logModalTitle" class="modal-title"></h3><div id="modalBody" class="text-gray-800 leading-relaxed text-base"></div><div class="text-center mt-5"><button class="pq-button accent" onclick="discussDiaryWithCaretchi()">この日記をケアっちと振り返る</button></div></div></div>
+
+    <script type="module">
+        // Firebase SDK Import
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, query, orderBy, serverTimestamp, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+
+        const GEMINI_API_KEY = ""; 
+        const GEMINI_TEXT_MODEL = "gemini-2.0-flash";
+
+        const userStrengthsFull = ["内省", "学習欲", "収集心", "運命思考", "着想", "最上思考", "個別化", "親密性", "共感性", "成長促進"];
+        const userTopStrengths = userStrengthsFull.slice(0, 5);
+        
+        const gadhaTheoryData = {
+            summary: {
+                title: "GADHA理論 要約",
+                summary: "GADHAの理論は、加害者が自身の<span class='highlight'>加害システム</span>を<span class='highlight'>ケアのシステム</span>へと変容させるための理論です。",
+                sections: [
+                    { id: "summary_overview", title: "理論の核心", content: "加害者は、幼少期に加害的な環境で育ち、傷つきを負った結果、自分を守るために加害的な信念体系（システム）を身につけてきました。この信念体系は、<span class='highlight'>一元論的な世界観</span>（上下関係や正誤が絶対）に基づいており、他者を支配し、服従させることで自分の存在価値を確認しようとします。しかし、これは真の解決にはならず、加害者自身と周囲の人々を不幸にし続けます。<br><br>変容とは、この加害のシステムを、ケアのシステムへと変えていくことです。ケアのシステムは、<span class='highlight'>多元的な世界観</span>に基づき、他者との違いを認め、互いの解釈やニーズを尊重し、共同で世界を構築していくことを目指します。<br><br>変容のためには、まず自分の加害的な言動を自覚し、その背後にある信念を理解することが重要です。そして、ケアに基づいた言動を試し、その結果から学び、徐々に信念を変容させていく必要があります。", unlocked: true },
+                ]
+            },
+            normative: {
+                title: "規範編：変容するとは？",
+                summary: "｢自分｣という<span class='highlight'>加害のシステム</span>を<span class='highlight'>ケアのシステム</span>に変えていくことです。",
+                sections: [
+                    { id: "norm_sec1", title: "システム思考と氷山モデル", content: "GADHAの理論では、問題を解決するために<span class='highlight'>システム思考</span>を用います。出来事を単体で捉えるのではなく、その背後にあるパターン、構造、価値観（メンタルモデル）との関連性を理解しようとする考え方です。<br><br>氷山モデルを用いて説明すると、水面上に見える「出来事」（例：風邪をひく）は、水面下の「行動パターン」（例：睡眠不足）、「構造」（例：仕事の忙しさによるストレス）、「価値観」（例：仕事のキャリア優先）と繋がっています。<br><br>真の問題解決には、表層的な出来事だけでなく、深層にあるシステム全体を理解し、特に<span class='highlight'>価値観レベルでの変容が必要</span>となります。", unlocked: true },
+                    { id: "norm_sec2", title: "加害のシステムとは？", content: "加害の信念体系を持つ人が生み出すのは<span class='highlight'>支配と服従の関係</span>です。<br><br>例：「相手にとって良いと思われることをしたのに相手が喜ばない時」に「なんでお前は素直に喜ばないんだ」と相手をなじり、自分の考えを押し付けます。<br><br>この背景には、<span class='highlight'>一元論的な価値観</span>（上下関係、正誤の絶対視、人を従わせることが善）があります。この世界観では、自分は常に正しく、相手が間違っていると考えがちです。", unlocked: true },
+                    { id: "norm_sec3", title: "ケアのシステムとは？", content: "ケアの信念体系では、同じ状況でも反応が異なります。<br><br>例：「喜んで欲しかったけど何か違ったかな？」と考え、「前は赤色が好きだと言ってたけど好みが変わったかな？」と<span class='highlight'>対話を通じて理解</span>を深めようとします。<br><br>背景には、世界は<span class='highlight'>多元的</span>であり、人々はそれぞれ異なる価値観を持つという認識があります。<br><br>幸福とは、自分が自分らしくあり、他者もその人らしくいられること。そのためには、互いの解釈やニーズを尊重し、<span class='highlight'>共同で世界を構築</span>していくことが重要です。", unlocked: true },
+                    { id: "norm_sec4", title: "変容の定義", content: "変容とは、｢<span class='highlight'>加害のシステムを、ケアのシステムに変える</span>｣ことです。これに取り組むのがGADHAにおける加害者変容です。", unlocked: true }
+                ]
+            },
+            transformation: {
+                title: "変容編：どうすれば変われるか？",
+                summary: "<span class='highlight'>言動を変え、結果が変わり、信念が変わる。</span>このサイクルを回すことが変容の鍵です。",
+                sections: [
+                    { id: "trans_sec1", title: "まず行動を変える重要性", content: "信念はすぐには変わりません。信じられなくてもいいので、<span class='highlight'>ケアに基づいた言動を試して</span>みることが第一歩です。<br><br>言動が変われば、異なる結果が生じ、その結果が自分にとって良いものであった時に、人の信念は変化します。<br><br>GADHAでは思想や知識も大切ですが、<span class='highlight'>実践が非常に重要</span>になります。", unlocked: true },
+                    { id: "trans_sec2", title: "行動と信念のサイクル", content: "ある環境で信念Aに基づき行動し悪い結果なら信念Aを破棄。信念Bで良い結果なら信念Bを強化します。<br><br>しかし、環境が変わると、かつて機能した信念Bが悪い結果を生むこともあります。<br><br>ここで<span class='highlight'>勇気を出して違う行動を取る</span>ことが必要です。そのためには、まずケアのシステムという<span class='highlight'>新しい行動の選択肢を知る</span>ことが前提となります。", unlocked: true },
+                    { id: "trans_sec3", title: "自分が間違う可能性の認識", content: "自分の信念を絶対視せず、<span class='highlight'>間違う可能性がある</span>と気づくことが重要です。そうでなければ行動を変えられず、結果も信念も変わりません。<br><br>悪い結果を他責にせず受け入れることは葛藤や虚無感を伴いますが、それを乗り越え新しい行動を試すことで「一皮むける」＝変容学習が起こります。", unlocked: true },
+                    { id: "trans_sec4", title: "加害者変容のロードマップ概観", content: "変容は一直線ではなく、進んだと思っても加害言動に戻ることもあります。<br><br>「関係の危機」→「問題の自覚」→「知識の獲得」→「実践と修正」→「伝道と提案」→「美徳の発揮」というプロセスを辿ります。<br><br>各段階で<span class='highlight'>仲間の支え</span>が不可欠です。", unlocked: true }
+                ]
+            },
+            happiness: {
+                title: "幸福編：変容で得られる幸福",
+                summary: "<span class='highlight'>存在の受容</span>と、人間存在の<span class='highlight'>根源的な安心</span>を与え合える関係です。",
+                sections: [
+                    { id: "happy_sec1", title: "存在の受容という幸福", content: "人間は解釈する生き物であり、故に傷つく弱い生き物です。自分の解釈と他者の解釈がズレた時、傷つきます（ニーズが生じる）。<br><br>この<span class='highlight'>ニーズをケアし合う</span>こと、ありのままの存在を認め合うことが幸福の核です。<br><br>自分のニーズが誰かに満たされること以上に、<span class='highlight'>ケアをしようとしてくれる人がいること</span>が根源的な安心に繋がります。", unlocked: true },
+                    { id: "happy_sec2", title: "愛し合うとは何か？", content: "愛とは、相手の傷つき（ニーズ）を認め、それをケアしようとすることです。<span class='highlight'>相手の世界に寄り添おうとする</span>具体的な行動です。<br><br>お互いにそれができると、自分の感じ方や考え方を攻撃される心配がなくなり、<span class='highlight'>「私たちの世界」を構築</span>でき、存在が安定します。", unlocked: true },
+                     { id: "happy_sec3", title: "持続可能な幸福とは？", content: "GADHAでは<span class='highlight'>受容型の幸福</span>（ありのままの自分を受け容れる）を採用します。実現型や没入型の幸福は持続が難しいからです。<br><br>幸福とは自分の傷つき、弱さ、不完全さを受け容れて生きること。それが自然なことだと理解することです。", unlocked: true },
+                ]
+            },
+            behavior: {
+                title: "言動編：具体的なケアとは？",
+                summary: "<span class='highlight'>感覚の否定をせず</span>、<span class='highlight'>情動調律</span>（相手の感情や感覚を理解し受容する）を心がけることです。",
+                sections: [
+                    { id: "behav_sec1", title: "感覚の否定は加害", content: "「考えすぎ」「そんなことで怒るな」といった言葉は、相手の感覚を否定し、存在を根底から揺るがす暴力です。<br><br>相手の感覚を尊重するには、<span class='highlight'>言葉を選ぶ</span>ことが大切です。", unlocked: true },
+                    { id: "behav_sec2", title: "情動調律（認識的共感）", content: "情動調律とは、相手の感覚や信念を<span class='highlight'>わかろうとし、それを受容する</span>ことです。「あなたはこう感じるのだね」とそのまま受け止めること。<br><br>相手と同じように感じること（情動的共感）とは異なります。<br><br>情動調律しようとすること自体が、相手に安心を与えます。", unlocked: true },
+                    { id: "behav_sec3", title: "加害者は自分にも情動調律できない", content: "加害者は、他者との解釈のズレで傷ついても、その傷つきや弱さを認められません。そのため、怒りや支配でケアを要求します。<br><br>自分のニーズを認め、適切に依頼し、ケアしてもらったことに感謝することが、相互のケア交換には不可欠です。", unlocked: true }
+                ]
+            },
+            belief: {
+                title: "信念編：加害的な信念を手放す",
+                summary: "加害的な信念（例：べき論、上下関係）は<span class='highlight'>内面化された他者の声</span>。それをケアの信念（多元性、相互尊重）に変えます。",
+                sections: [
+                    { id: "belief_sec1", title: "加害的な信念の例", content: "「相手の感じ方が間違っている」「お前は自分のための道具だ」「パートナーなら分かって当然」などがあります。<br><br>これらの信念は「正しい/間違い」ではなく、それ故に人を傷つけてしまうという性質のものです。", unlocked: true },
+                    { id: "belief_sec2", title: "信念は内面化された他者の声", content: "信念は生まれ持ったものではなく、育った環境や社会から学習し、<span class='highlight'>仕方なく身につけてきた</span>ものです。<br><br>「これは本当に自分の声だっただろうか」と問い直し、採用するかどうかを自分で決めることができます。", unlocked: true },
+                    { id: "belief_sec3", title: "一元論的世界観と多元論的世界観", content: "加害的信念は<span class='highlight'>一元論</span>（上下、正誤、中心と周辺）に基づきます。ケアの信念は<span class='highlight'>多元論</span>（多様な価値観や正しさが矛盾しつつ共存）に基づきます。<br><br>自分の考えと違うものを許さないことは暴力です。確かな信念を持ちつつも、間違いを認める「しなやかな確かさ」が大切です。", unlocked: true }
+                ]
+            },
+            structure: {
+                title: "構造編：加害の連鎖を断ち切る",
+                summary: "加害者はかつて被害者だったかもしれません。その<span class='highlight'>傷つきを癒し</span>、<span class='highlight'>ケアの連鎖</span>を始めることが償いにも繋がります。",
+                sections: [
+                    { id: "struct_sec1", title: "加害の起源と防衛反応", content: "加害の起源は、主たる養育者から受けた被害である場合がほとんどです。生き残るために「Fight(戦闘)」「Fleet(逃避)」「Freeze(解離)」「Fawn(忖度)」といった防衛反応を身につけ、それが加害的な信念となっています。", unlocked: true },
+                    { id: "struct_sec2", title: "過去の傷と現在の痛み", content: "養育環境で受けた傷つきは、<span class='highlight'>今も現在進行形の痛み</span>（トラウマによるフラッシュバックなど）として残っています。<br><br>この痛みをケアすることなしには、他者の痛みも理解できません。", unlocked: true },
+                    { id: "struct_sec3", title: "持続不可能なセルフケア（依存）", content: "傷つきを癒す方法を知らないため、アルコール、ギャンブル、性行為、あるいは加害行為そのものといった<span class='highlight'>依存行動で痛みを麻痺</span>させようとします。<br><br>これらは全て、精神的な傷つきからの逃避行動です。", unlocked: true },
+                    { id: "struct_sec4", title: "償いとケアの連鎖", content: "私たちは被害者に対して負債を抱えています。償いとは、<span class='highlight'>自他ともに持続可能な形で相互にケアできる関係</span>を構築することを目指すことです。<br><br>ミクロ（個人）の変容が、マクロ（社会）の加害の連鎖を断ち切る起点となります。ケアもまた連鎖します。", unlocked: true }
+                ]
+            }
+        };
+        
+        let playerState = {
+            level: 1, exp: 0, careCrystals: 0,
+            todayActionGoal: "GADHA理論の「規範編」を読んでみよう！",
+            todayActionGoalHint: "ケアっち「規範編では、加害とケアのシステムの違いが分かるよ。まずはそこからだね！」", 
+            theoryReadSections: {},
+            customInfoLastUpdate: null,
+            customInfoText: `
+                <div class="pq-card">
+                    <h3 class="pq-card-title">あなたの強み (Top5)</h3>
+                    <ul id="strengthsListInternal" class="list-disc list-inside text-sm text-gray-700 space-y-1">
+                        ${userTopStrengths.map(s => `<li><span class="font-bold">${s}</span></li>`).join('')}
+                    </ul>
+                    <p class="mt-3 text-xs text-gray-600">これらの<span class="highlight">素晴らしい力</span>を、GADHA理論の実践に活かしていきましょう！</p>
+                </div>
+                <div class="pq-card">
+                    <h3 class="pq-card-title">ワーキングメモリについて</h3>
+                    <p class="text-sm text-gray-700">情報を一時的に記憶しながら処理する力（WMI:82）は、平均より少し低い傾向ですが、心配いりません！<br>
+                        <span class="highlight">情報を小分けにする</span>、<span class="highlight">メモを取る</span>、<span class="highlight">図や絵で理解する</span>などの工夫で、あなたの「学習欲」や「収集心」は十分に活かせます。<br>
+                        理論学習も、一度に全部を覚えようとせず、<span class="highlight">「今日はこの部分だけ」</span>と決めて取り組むのがおすすめです。
+                    </p>
+                </div>
+                 <div class="pq-card">
+                    <h3 class="pq-card-title">大切にしている価値観</h3>
+                    <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+                        <li><span class="font-bold">価値ある選択肢の創造:</span> <span class="highlight">あなたらしさ</span>を活かし、新しい可能性を見つける力。</li>
+                        <li><span class="font-bold">あなた感:</span> 「これは自分のためだ」と感じる<span class="highlight">心の琴線に触れるもの</span>を大切にする感性。</li>
+                        <li><span class="font-bold">じぶんQUEST:</span> 自己理解を深め、<span class="highlight">自分を活かす探求</span>を楽しむ姿勢。</li>
+                    </ul>
+                     <p class="mt-3 text-xs text-gray-600">これらの価値観は、GADHA理論を<span class="highlight">自分事として捉え</span>、主体的に学ぶ上で大きな助けになります。</p>
+                </div>
+                 <div class="pq-card">
+                    <h3 class="pq-card-title">ケアっちからの応援メッセージ</h3>
+                    <p class="text-sm text-gray-700">あなたの「内省」と「学習欲」は、GADHA理論の深い理解に繋がります。「収集心」で得た知識を、「着想」で新しいケアのアイデアに変えてみましょう。「運命思考」で人との繋がりを感じ、「個別化」で一人ひとりに合ったケアを考え、「親密性」「共感性」で心に寄り添い、「成長促進」で自他の変容を喜び合えるはずです。<br>あなたのペースで、<span class="highlight">「じぶんQUEST」</span>を楽しんでくださいね！ケアっちがいつも応援しています！</p>
+                </div>`
+        };
+        let diaryEntries = []; 
+        let currentOpenSection = { chapterKey: null, sectionId: null, title: null }; 
+        let currentDiaryEntryForDiscussion = null; 
+
+        let db, auth, userId, app;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'gadha-quest-default';
+
+        async function initializeFirebase() {
+            showLoading("Firebase初期化中...");
+            try {
+                const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+                 if (!firebaseConfig.apiKey) {
+                    console.error("Firebase 設定が見つかりません。ダミーデータモードで動作します。");
+                    setLogLevel('silent'); 
+                    initializeAppLocally(); 
+                    return;
+                }
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                setLogLevel('debug');
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        await loadPlayerStateFromFirestore();
+                        await loadDiaryEntriesFromFirestore();
+                        initializeAppUI();
+                    } else {
+                         if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                            try { await signInWithCustomToken(auth, __initial_auth_token); } catch (error) { await signInAnonymously(auth); }
+                        } else { await signInAnonymously(auth); }
+                    }
+                });
+            } catch (error) { initializeAppLocally(); } finally { hideLoading(); }
+        }
+        
+        function initializeAppLocally() {
+            console.warn("ローカルデータでアプリを初期化します。");
+            userId = `local-${crypto.randomUUID()}`;
+            initializeAppUI(); hideLoading();
+        }
+
+        async function savePlayerStateToFirestore() {
+            if (!db || !userId) return;
+            try {
+                await setDoc(doc(db, "artifacts", appId, "users", userId, "playerState", "main"), playerState);
+            } catch (error) { console.error("Error saving player state: ", error); }
+        }
+
+        async function loadPlayerStateFromFirestore() {
+            if (!db || !userId) return;
+            try {
+                const docSnap = await getDoc(doc(db, "artifacts", appId, "users", userId, "playerState", "main"));
+                if (docSnap.exists()) { 
+                    const loadedData = docSnap.data();
+                    playerState = { 
+                        ...playerState, 
+                        ...loadedData,
+                        customInfoText: loadedData.customInfoText || playerState.customInfoText 
+                    }; 
+                } 
+                else { await savePlayerStateToFirestore(); }
+            } catch (error) { console.error("Error loading player state: ", error); }
+        }
+
+        async function saveDiaryEntryToFirestore(entry) {
+            if (!db || !userId) return null;
+            try {
+                const docRef = await addDoc(collection(db, "artifacts", appId, "users", userId, "diaryEntries"), { ...entry, createdAt: serverTimestamp() });
+                return docRef.id;
+            } catch (error) { console.error("Error saving diary entry: ", error); return null; }
+        }
+
+        async function loadDiaryEntriesFromFirestore() {
+            if (!db || !userId) { diaryEntries = []; return; }
+            try {
+                const q = query(collection(db, "artifacts", appId, "users", userId, "diaryEntries"), orderBy("date", "desc"));
+                const querySnapshot = await getDocs(q);
+                diaryEntries = [];
+                querySnapshot.forEach((doc) => diaryEntries.push({ id: doc.id, ...doc.data() }));
+            } catch (error) { console.error("Error loading diary entries: ", error); diaryEntries = []; }
+        }
+        
+        window.navigateTo = function(screenId, context = null) { 
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            document.querySelectorAll('.nav-button').forEach(b => b.classList.remove('active'));
+            const navButton = document.querySelector(`.nav-button[onclick*="'${screenId}'"]`); 
+            if (navButton) navButton.classList.add('active');
+            
+            const adviceAreaId = `caretchi${screenId.charAt(0).toUpperCase() + screenId.slice(1).replace('Screen','')}Advice`;
+            const adviceElem = document.getElementById(adviceAreaId);
+            if (adviceElem) {
+                let adviceText = "";
+                switch(screenId) {
+                    case 'homeScreen': 
+                        adviceText = playerState.todayActionGoalHint && playerState.todayActionGoalHint !== "ヒントの取得に失敗しました。" && playerState.todayActionGoalHint !== "まずはGADHA理論の基本を復習してみよう！" && playerState.todayActionGoalHint !== "行動を変える勇気を持ってみよう！"
+                            ? `ケアっち「今日の目標<span class="highlight">${playerState.todayActionGoal.substring(0,10)}...</span>のヒントだよ！」` 
+                            : "ケアっち「今日の目標、一緒に頑張ろうね！」"; 
+                        break;
+                    case 'libraryScreen': adviceText = "ケアっち「知りたいこと、何でも聞いてね！<span class='highlight'>一つずつ</span>確認しよう。」"; break;
+                    case 'diaryScreen': adviceText = "ケアっち「今日の出来事、<span class='highlight'>どんな小さなことでも</span>記録してね！」"; break;
+                    case 'customInfoScreen': adviceText = "ケアっち「これは<span class='highlight'>あなただけ</span>の特別な情報だよ！」"; break;
+                    case 'aiSupportScreen': adviceText = "ケアっち「どんなことでも<span class=\"highlight\">気軽に話しかけて</span>ね！」"; break;
+                }
+                adviceElem.innerHTML = adviceText;
+            }
+
+            if (screenId === 'homeScreen') updateHomeScreen();
+            if (screenId === 'customInfoScreen') displayCustomInfo();
+            if (screenId === 'aiSupportScreen' && context) {
+                const chatInput = document.getElementById('chatInput');
+                const initialMessage = `ケアっち、「${context.topic}」についてもっと詳しく教えてほしいな。`;
+                chatInput.value = ''; 
+                addChatMessageToAI("user", initialMessage); 
+                addChatMessageToAI("ai", `もちろん！「${context.topic}」についてだね。どんなことが知りたい？<br>ポイントを絞って<span class="highlight">一つずつ</span>聞いてくれると嬉しいな。`);
+            } else if (screenId === 'aiSupportScreen') {
+                document.getElementById('chatInput').placeholder = "メッセージを入力してね";
+            }
+        }
+
+        window.openModal = function(modalId) { document.getElementById(modalId).style.display = "block"; }
+        window.closeModal = function(modalId) { document.getElementById(modalId).style.display = "none"; }
+
+        window.markAsRead = async function() {
+            if (currentOpenSection.chapterKey && currentOpenSection.sectionId) {
+                const { chapterKey, sectionId } = currentOpenSection;
+                gainExp(5);
+                playerState.theoryReadSections[sectionId] = true;
+                updateTheoryProgress();
+                await savePlayerStateToFirestore();
+            }
+        }
+        
+        window.discussTheoryWithCaretchi = function() {
+            if (currentOpenSection.title) {
+                closeModal('theoryModal');
+                navigateTo('aiSupportScreen', { topic: `理論「${currentOpenSection.title}」` });
+            }
+        }
+        window.discussDiaryWithCaretchi = function() {
+            if (currentDiaryEntryForDiscussion) {
+                closeModal('logModal');
+                navigateTo('aiSupportScreen', { topic: `日記「${new Date(currentDiaryEntryForDiscussion.date).toLocaleDateString('ja-JP')}」の振り返り` });
+                currentDiaryEntryForDiscussion = null; 
+            }
+        }
+         window.navigateToCaretchiWithCustomInfo = function() {
+            navigateTo('aiSupportScreen', { topic: "専用情報について" });
+        }
+
+
+        function displayTheory() {
+            const theoryContentDiv = document.getElementById('theoryContent');
+            theoryContentDiv.innerHTML = '';
+            for (const chapterKey in gadhaTheoryData) {
+                const chapter = gadhaTheoryData[chapterKey];
+                const chapterDiv = document.createElement('div');
+                chapterDiv.className = 'pq-card mb-4';
+                chapterDiv.innerHTML = `<h3 class="pq-card-title text-lg">${chapter.title}</h3><p class="theory-section-summary mb-2">${chapter.summary}</p>`;
+                chapter.sections.forEach(section => {
+                    const sectionCard = document.createElement('div');
+                    sectionCard.className = 'theory-section p-3 border-l-4 border-green-500 bg-green-100 mb-2 shadow-md rounded-lg'; 
+                    sectionCard.innerHTML = `
+                        <h4 class="font-bold pixel-font text-md text-green-700">${section.title}</h4>
+                        <p class="text-xs text-gray-700 font-medium">${section.content.substring(0, 100).replace(/<span class='highlight'>|<\/span>|<br>/g, " ")}...</p>
+                        <button class="pq-button primary text-xs mt-2 py-1 px-2" onclick="showSectionDetail('${chapterKey}', '${section.id}')">詳しく読む</button>`; 
+                    chapterDiv.appendChild(sectionCard);
+                });
+                theoryContentDiv.appendChild(chapterDiv);
+            }
+        }
+
+        window.showSectionDetail = function(chapterKey, sectionId) {
+            const section = gadhaTheoryData[chapterKey].sections.find(s => s.id === sectionId);
+            if (section) {
+                currentOpenSection = { chapterKey, sectionId, title: section.title }; 
+                document.getElementById('modalTitle').innerHTML = section.title;
+                let formattedContent = section.content.split(/<br\s*\/?>\s*<br\s*\/?>/) 
+                                          .map(p => p.trim())
+                                          .filter(p => p.length > 0)
+                                          .map(pText => `<p class="mb-3 text-gray-800">${pText.replace(/\n|<br\s*\/?>/g, ' ')}</p>`).join(''); 
+                document.getElementById('modalBody').innerHTML = formattedContent;
+                openModal('theoryModal');
+            }
+        }
+        
+        document.getElementById('practiceLogForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            showLoading("日記を記録＆評価中...");
+            const diaryText = document.getElementById('diaryEntry').value;
+            const newEntryData = {
+                date: document.getElementById('diaryDate').value,
+                entry: diaryText,
+                strength: "", // AI will determine this
+                evaluation: "", 
+            };
+
+            const combinedPrompt = `ユーザーの日記です。
+[日記ここから]
+${diaryText}
+[日記ここまで]
+
+この日記をGADHA理論の観点から評価し、100字以内で簡潔にポジティブな点と改善点を指摘してください。
+また、この日記の内容から、ユーザーが活かせたと思われるストレングスファインダーの資質（${userStrengthsFull.join("、")}の中から最も適切なものを1つだけ）を挙げてください。
+最後に、この日記と評価、ユーザー特性（上位資質: ${userTopStrengths.join(", ")}、WMI低）を踏まえ、次の具体的で小さなアクション目標を1つ、30字以内で提案してください。
+さらに、その提案したアクション目標を達成するための具体的なステップやヒントを、箇条書きで3つ、各ヒントは短く提案してください。
+
+回答形式は以下のJSONでお願いします:
+{
+  "evaluation": "（評価文）",
+  "usedStrength": "（活かせた資質名、なければ「特になし」）",
+  "nextActionGoal": "（翌日の目標）",
+  "goalHints": ["・ヒント1", "・ヒント2", "・ヒント3"]
+}`;
+            
+            try {
+                const aiResponse = await callGeminiAPI(combinedPrompt, true); // Pass true for JSON response
+                if (aiResponse) {
+                    newEntryData.evaluation = aiResponse.evaluation || "評価の取得に失敗しました。";
+                    newEntryData.strength = aiResponse.usedStrength || "特になし";
+                    playerState.todayActionGoal = aiResponse.nextActionGoal || "AI目標取得失敗。自分で設定しよう！";
+                    playerState.todayActionGoalHint = aiResponse.goalHints ? aiResponse.goalHints.join('\n') : "ヒントの取得に失敗しました。";
+
+                    document.getElementById('evaluationText').innerHTML = newEntryData.evaluation.replace(/\n/g, '<br>');
+                    document.getElementById('evaluatedStrengthText').textContent = newEntryData.strength;
+                    document.getElementById('lastDiaryEvaluation').style.display = 'block';
+                } else {
+                    throw new Error("AI response was null or undefined");
+                }
+            } catch (error) {
+                console.error("Error processing diary with AI:", error);
+                newEntryData.evaluation = "評価の取得に失敗しました。";
+                newEntryData.strength = "不明";
+                playerState.todayActionGoal = "「変容編」のポイントを一つ実践しよう。"; 
+                playerState.todayActionGoalHint = "行動を変える勇気を持ってみよう！";
+                document.getElementById('evaluationText').textContent = newEntryData.evaluation;
+                document.getElementById('evaluatedStrengthText').textContent = newEntryData.strength;
+                document.getElementById('lastDiaryEvaluation').style.display = 'block';
+            }
+            
+            const firestoreId = await saveDiaryEntryToFirestore(newEntryData); 
+            const newEntry = { id: firestoreId || Date.now().toString(), ...newEntryData };
+            diaryEntries.unshift(newEntry);
+            diaryEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
+            displayDiaryLogs(); 
+            
+            this.reset();
+            document.getElementById('diaryDate').valueAsDate = new Date();
+            gainExp(20); playerState.careCrystals += 5;
+            
+            await savePlayerStateToFirestore();
+            updateHomeScreen();
+            addChatMessageToAI("ai", `日記、読んだよ！評価と活かせた力も分析してみたから確認してね。明日の目標もホーム画面に設定したよ！`);
+            hideLoading();
+        });
+
+        function displayDiaryLogs(filteredEntries = null) {
+            const logListDiv = document.getElementById('diaryLogList');
+            logListDiv.innerHTML = '';
+            const entriesToDisplay = filteredEntries || diaryEntries;
+            if (entriesToDisplay.length === 0) {
+                logListDiv.innerHTML += '<p class="small-text text-gray-500 text-center">まだ日記はありません。</p>'; return;
+            }
+            entriesToDisplay.forEach(log => {
+                const logDiv = document.createElement('div');
+                logDiv.className = 'pq-card mb-2 p-3';
+                logDiv.innerHTML = `
+                    <h4 class="pq-card-title text-base">${new Date(log.date).toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' })} ${log.strength && log.strength !== "特になし" ? `<span class="text-xs highlight">${log.strength}</span>` : ''}</h4>
+                    <p class="small-text text-gray-600">${log.entry.substring(0,120)}...</p>
+                    ${log.evaluation ? `<div class="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded-md text-xs text-yellow-700"><strong class="pixel-font">ケアっち評価:</strong> ${log.evaluation.substring(0,80)}...</div>` : ''}
+                    <button class="pq-button accent text-xs mt-1 py-1 px-2" onclick="viewDiaryDetail('${log.id}')">詳細と評価</button>`;
+                logListDiv.appendChild(logDiv);
+            });
+        }
+        
+        window.searchDiary = function() {
+            const keyword = document.getElementById('diarySearchKeyword').value.toLowerCase();
+            if (!keyword) { displayDiaryLogs(); return; }
+            const filtered = diaryEntries.filter(log => 
+                log.entry.toLowerCase().includes(keyword) || 
+                (log.strength && log.strength.toLowerCase().includes(keyword)) ||
+                (log.evaluation && log.evaluation.toLowerCase().includes(keyword)) ||
+                new Date(log.date).toLocaleDateString('ja-JP').includes(keyword)
+            );
+            displayDiaryLogs(filtered);
+        }
+
+        window.viewDiaryDetail = function(logId) {
+            const log = diaryEntries.find(l => String(l.id) === String(logId));
+            if (log) {
+                currentDiaryEntryForDiscussion = log; 
+                document.getElementById('logModalTitle').innerHTML = `${new Date(log.date).toLocaleDateString('ja-JP')} の日記`;
+                let bodyContent = `<p class="whitespace-pre-wrap">${log.entry}</p>`;
+                if (log.strength && log.strength !== "特になし") bodyContent += `<p class="mt-2"><strong>ケアっちが見つけた力：</strong> <span class="highlight">${log.strength}</span></p>`;
+                if (log.evaluation) {
+                     bodyContent += `<div class="mt-3 diary-evaluation"><h3 class="pixel-font">ケアっちの評価</h3><p>${log.evaluation.replace(/\n/g, '<br>')}</p></div>`;
+                }
+                document.getElementById('logModalBody').innerHTML = bodyContent;
+                openModal('logModal');
+            } else { alert("指定された日記が見つかりませんでした。"); }
+        }
+        
+        function updateHomeScreen() {
+            document.getElementById('todayActionGoal').innerHTML = playerState.todayActionGoal || "ケアっちからの目標をお楽しみに！";
+            const hintListElem = document.getElementById('actionGoalHintList');
+            const hintContainer = document.getElementById('todayActionGoalHint');
+            if (playerState.todayActionGoalHint && playerState.todayActionGoalHint !== "ヒントの取得に失敗しました。" && playerState.todayActionGoalHint !== "まずはGADHA理論の基本を復習してみよう！" && playerState.todayActionGoalHint !== "行動を変える勇気を持ってみよう！") {
+                hintListElem.innerHTML = playerState.todayActionGoalHint.split('\n').map(hint => `<li>${hint.replace(/^- /,'')}</li>`).join('');
+                hintContainer.style.display = 'none'; 
+            } else {
+                hintListElem.innerHTML = '<li>具体的なヒントはありません。自分で考えてみよう！</li>';
+                hintContainer.style.display = 'none';
+            }
+
+            updateStatus(); updateTheoryProgress(); updatePracticeCount();
+            const totalSections = Object.values(gadhaTheoryData).reduce((sum, chapter) => sum + chapter.sections.reduce((s, sec) => s + 1, 0), 0);
+            const readCount = Object.keys(playerState.theoryReadSections).length;
+            const theoryProgressVal = totalSections > 0 ? Math.round((readCount / totalSections) * 100) : 0;
+            const practiceTarget = 30;
+            const practiceProgressVal = Math.min(100, Math.round((diaryEntries.length / practiceTarget) * 100));
+            const overallProgressVal = Math.round((theoryProgressVal + practiceProgressVal) / 2);
+            const overallProgressElem = document.getElementById('overallProgress');
+            overallProgressElem.style.width = `${overallProgressVal}%`;
+            overallProgressElem.textContent = `${overallProgressVal}%`;
+        }
+        
+        window.toggleActionGoalHint = function() {
+            const hintContainer = document.getElementById('todayActionGoalHint');
+            hintContainer.style.display = hintContainer.style.display === 'none' ? 'block' : 'none';
+        }
+
+
+        function updateTheoryProgress() {
+            const totalSections = Object.values(gadhaTheoryData).reduce((sum, chapter) => sum + chapter.sections.reduce((s, sec) => s + 1, 0), 0);
+            const readCount = Object.keys(playerState.theoryReadSections).length;
+            document.getElementById('theoryProgress').textContent = totalSections > 0 ? `${Math.round((readCount / totalSections) * 100)}` : '0';
+        }
+        function updatePracticeCount() { document.getElementById('practiceCount').textContent = diaryEntries.length; }
+
+        function displayCustomInfo() {
+            document.getElementById('customInfoContent').innerHTML = playerState.customInfoText;
+        }
+        
+        window.updateCustomInfoWithAI = async function() {
+            showLoading("専用情報をAIが更新中...");
+            const theoryProg = playerState.theoryReadSections ? (Object.keys(playerState.theoryReadSections).length / Object.values(gadhaTheoryData).reduce((s,c)=>s+c.sections.length,0)*100).toFixed(0) : 0;
+            const prompt = `ユーザーのGADHA理論体得を支援する「あなた専用情報」を更新してください。
+ユーザー情報:
+- ストレングスファインダー上位資質: ${userStrengthsFull.join("、")}
+- WAIS-IV WMI(ワーキングメモリ): 82 (低い傾向)
+- 大切にしている価値観: 「価値ある選択肢の創造」「あなた感」「じぶんQUEST」
+- ASD当事者であり、自己理解を深めている。
+現在の進捗:
+- GADHA理論の理解度: ${theoryProg}%
+- 実践日記の記録回数: ${diaryEntries.length}件
+指示:
+上記情報を最大限に活用し、具体的でパーソナルなアドバイスをHTML形式で、複数のカード(.pq-card)として生成してください。各カードには<h3 class="pq-card-title">タイトル</h3>と<p class="text-sm text-gray-700">本文</p>を含めます。情報量を最大限に増やし、読みやすく、かつユーザーの特性（特にWMIの低さ、強み、価値観、家族状況）に深く寄り添った内容にしてください。重要な箇所は<span class="highlight"></span>で強調し、返答は明瞭かつ簡潔に。`;
+            try {
+                const newCustomInfo = await callGeminiAPI(prompt);
+                if (newCustomInfo) {
+                    playerState.customInfoText = newCustomInfo; 
+                    playerState.customInfoLastUpdate = new Date().toISOString();
+                    displayCustomInfo(); await savePlayerStateToFirestore();
+                    addChatMessageToAI("ai", "ケアっちだよ！あなた専用情報を新しくしたから、見てみてね！");
+                } else { addChatMessageToAI("ai", "うーん、専用情報の更新、うまくいかなかったみたい。もう一回試してみてくれる？"); }
+            } catch (error) { addChatMessageToAI("ai", "専用情報の更新中にエラーが起きちゃった。ごめんね。"); }
+             finally { hideLoading(); }
+        }
+
+        window.askCaretchiFromLibrary = async function() { 
+            const query = document.getElementById('libraryQuery').value;
+            const responseArea = document.getElementById('libraryAiResponse');
+            if (!query.trim()) { responseArea.innerHTML = `<p class="text-red-500 text-sm">質問を書いてね。</p>`; responseArea.style.display = 'block'; return; }
+            showLoading("ケアっちが考え中...");
+            const prompt = `GADHA理論の質問「${query}」について、分かりやすく教えて。ポイントは<span class="highlight">強調</span>してね。短く、大切なことだけでOKだよ。`;
+            try {
+                const aiResponse = await callGeminiAPI(prompt);
+                responseArea.innerHTML = `<h3 class="pixel-font">ケアっちより</h3><p>${aiResponse || "ちょっと難しい質問だったかな？別の言葉で聞いてみて！"}</p>`;
+                responseArea.style.display = 'block';
+            } catch (error) { responseArea.innerHTML = `<h3 class="pixel-font">ケアっちより</h3><p>ごめん！エラーだよ。もう一度試してね。</p>`; responseArea.style.display = 'block';}
+            finally { document.getElementById('libraryQuery').value = ''; hideLoading(); }
+        }
+
+        window.sendChatMessage = async function() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+            addChatMessageToAI("user", message); input.value = ''; showLoading("ケアっちが返信中...");
+            const prompt = `ユーザーからのチャット「${message}」への返信を考えて。ユーザーはGADHA理論を学んでいて、ワーキングメモリが低めだから、<span class="highlight">短く、分かりやすい言葉</span>で答えてね。もし具体的なアクションを提案できるなら、「今日の目標にどうかな？」と聞いてみて。`;
+            try {
+                const aiResponseText = await callGeminiAPI(prompt);
+                addChatMessageToAI("ai", aiResponseText || "ごめんね、うまく言葉が出てこないや。");
+                if (aiResponseText.toLowerCase().includes("目標にどうかな？") || aiResponseText.toLowerCase().includes("試してみよう")) { 
+                    const potentialGoalMatch = aiResponseText.match(/「(.*?)」を目標にどうかな？|「(.*?)」を試してみよう/);
+                    const potentialGoal = potentialGoalMatch ? (potentialGoalMatch[1] || potentialGoalMatch[2]) : null;
+                    if (potentialGoal && potentialGoal.length < 100) {
+                        document.getElementById('suggestedActionText').textContent = potentialGoal;
+                        document.getElementById('actionableResponseArea').style.display = 'block';
+                    } else { document.getElementById('actionableResponseArea').style.display = 'none';}
+                } else { document.getElementById('actionableResponseArea').style.display = 'none'; }
+            } catch (error) { addChatMessageToAI("ai", "通信エラーだよ。ごめんね。"); }
+            finally { hideLoading(); }
+        }
+        
+        function addChatMessageToAI(sender, message) {
+            const chatArea = document.getElementById('chatArea');
+            const bubble = document.createElement('div');
+            bubble.classList.add('chat-bubble', sender); bubble.innerHTML = message;
+            chatArea.appendChild(bubble); chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        window.adoptAsActionGoal = async function() {
+            const suggestedAction = document.getElementById('suggestedActionText').textContent;
+            if (suggestedAction) {
+                playerState.todayActionGoal = suggestedAction; 
+                const hintPrompt = `目標「${suggestedAction}」を達成するための具体的なステップやヒントを、箇条書きで3つ提案して。各ヒントは短く、ユーザーのWMIの低さに配慮して。`;
+                try {
+                    playerState.todayActionGoalHint = await callGeminiAPI(hintPrompt) || "具体的なヒントはまた今度ね！";
+                } catch (error) {
+                    playerState.todayActionGoalHint = "まずは目標を意識することから始めてみよう！";
+                }
+                updateHomeScreen(); navigateTo('homeScreen');
+                addChatMessageToAI("ai", `よし！「${suggestedAction}」を今日の目標にしたよ！応援してる！`);
+                document.getElementById('actionableResponseArea').style.display = 'none';
+                await savePlayerStateToFirestore();
+            }
+        }
+
+        async function gainExp(amount) {
+            playerState.exp += amount;
+            if (playerState.exp >= (playerState.level * 50) && playerState.level < 10) {
+                playerState.level++;
+                addChatMessageToAI("ai", `やったね！レベルが<span class="highlight">${playerState.level}</span>になったよ！`);
+            }
+            updateStatus(); await savePlayerStateToFirestore();
+        }
+
+        function updateStatus() {
+            document.getElementById('playerLevel').textContent = playerState.level;
+            document.getElementById('playerExp').textContent = playerState.exp;
+            document.getElementById('playerCareCrystals').textContent = playerState.careCrystals;
+        }
+        
+        async function callGeminiAPI(promptText, expectJson = false) {
+            showLoading("AIと通信中...");
+            const apiKey = ""; 
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_TEXT_MODEL}:generateContent?key=${apiKey}`;
+            
+            const payload = { 
+                contents: [{ role: "user", parts: [{ text: promptText }] }], 
+                generationConfig: { 
+                    temperature: 0.6, 
+                    maxOutputTokens: 800, 
+                    ...(expectJson && { responseMimeType: "application/json"}), // Add this if expecting JSON
+                    "safetySettings": [
+                        {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+                        {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+                        {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+                        {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"}
+                    ]
+                }
+            }; 
+            try {
+                const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                if (!response.ok) { 
+                    const errorBody = await response.json(); 
+                    console.error("Gemini API Error:", response.status, errorBody);
+                    let errorMessage = `APIリクエスト失敗 ${response.status}`;
+                    if (errorBody && errorBody.error && errorBody.error.message) {
+                        errorMessage += `: ${errorBody.error.message}`;
+                    }
+                    throw new Error(errorMessage); 
+                }
+                const result = await response.json();
+                if (result.candidates && result.candidates[0]?.content?.parts?.[0]?.text) {
+                    hideLoading();
+                    if (expectJson) {
+                        try {
+                            // The response text might be wrapped in markdown ```json ... ```
+                            const jsonText = result.candidates[0].content.parts[0].text.replace(/^```json\s*|```\s*$/g, '');
+                            return JSON.parse(jsonText);
+                        } catch (e) {
+                            console.error("Error parsing JSON from AI response:", e, result.candidates[0].content.parts[0].text);
+                            return null; // Or throw error
+                        }
+                    }
+                    return result.candidates[0].content.parts[0].text;
+                } else if (result.candidates && result.candidates[0]?.finishReason === "SAFETY") {
+                    hideLoading(); return "ケアっち：安全上の理由で、このお話は続けられないみたい。ごめんね。";
+                }
+                 else { 
+                    console.error("Gemini API - Unexpected response structure:", result);
+                    hideLoading(); return "AI応答形式エラー。"; 
+                }
+            } catch (error) { console.error("Gemini API Error:", error); hideLoading(); throw error; }
+        }
+
+        function showLoading(message = "処理中...") {
+            const indicator = document.getElementById('loadingIndicator');
+            indicator.querySelector('div').textContent = message; indicator.style.display = 'flex';
+        }
+        function hideLoading() { document.getElementById('loadingIndicator').style.display = 'none'; }
+        
+        async function initializeAppUI() {
+            // const strengthSelectDiary = document.getElementById('usedStrengthDiary'); // This element is removed
+            // strengthSelectDiary.innerHTML = '<option value="">なし</option>';
+            // userStrengthsFull.forEach(strength => {
+            //     const option = document.createElement('option');
+            //     option.value = strength; option.textContent = strength;
+            //     strengthSelectDiary.appendChild(option);
+            // });
+            document.getElementById('diaryDate').valueAsDate = new Date();
+            displayTheory(); displayDiaryLogs(); displayCustomInfo(); updateHomeScreen(); navigateTo('homeScreen');
+            hideLoading();
+        }
+        
+        window.onclick = function(event) { if (event.target.classList.contains('modal')) closeModal(event.target.id); }
+        window.onload = initializeFirebase;
+    </script>
+</body>
+</html>
